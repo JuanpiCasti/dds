@@ -1,21 +1,23 @@
 @startuml
+
 class Inscripcion
-Inscripcion : Alumno alumno
-Inscripcion : Materia[] materias
-Inscripcion : boolean aprobada()
-Inscripcion : void agregarMateria(Materia materia)
+Inscripcion : - Alumno alumno
+Inscripcion : - Materia[] materias
+Inscripcion : + boolean aprobada()
 
 class Materia
-Materia : Materia[] correlativas
-Materia : boolean puedeCursar(Alumno alumno)
+Materia : - Materia[] correlativas
+Materia : + boolean puedeCursar(Alumno alumno)
 
 
 class Alumno
-Alumno : Materia[] materiasAprobadas
-Alumno : boolean aprobada(Materia materia)
+Alumno : - Materia[] materiasAprobadas
+Alumno : + boolean materiaAprobada(Materia materia)
+Alumno : + boolean aprobarMateria(Materia materia)
 
 Inscripcion *-- Materia
 Inscripcion *-- Alumno
 Materia <.. Inscripcion
 Alumno <.. Materia
+
 @enduml
