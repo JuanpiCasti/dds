@@ -11,19 +11,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class InscripcionesTest {
-    private final Materia algoritmos = new Materia(new ArrayList<>());
-    private final Materia syo = new Materia(new ArrayList<>());
-    private final Materia discreta = new Materia(new ArrayList<>());
-    private final Materia pdep = new Materia(new ArrayList<>(List.of(algoritmos, discreta)));
-    private final Materia ads = new Materia(new ArrayList<>(List.of(syo, algoritmos, discreta)));
-    private final Materia dds = new Materia(new ArrayList<>(List.of(pdep, ads)));
+    private static final Materia algoritmos = new Materia();
+    private static final Materia syo = new Materia();
+    private static final Materia discreta = new Materia();
+    private static final Materia pdep = new Materia();
 
+    private static final Materia ads = new Materia();
+    private static final Materia dds = new Materia();
+
+    @BeforeAll
+    static void init() {
+        pdep.establecerCorrelativas(algoritmos, discreta);
+        ads.establecerCorrelativas(syo,algoritmos,discreta);
+        dds.establecerCorrelativas(pdep,ads);
+    }
     @Test
     @DisplayName("Un alumno puede cursar una materia solo si tiene aprobadas todas sus correlativas.")
     void materiaPuedeCursar() {
         final Alumno alumno1 = new Alumno();
-        alumno1.aprobarMateria(algoritmos);
-        alumno1.aprobarMateria(discreta);
+        alumno1.aprobarMateria(InscripcionesTest.algoritmos);
+        alumno1.aprobarMateria(InscripcionesTest.discreta);
         assertTrue(pdep.puedeCursar(alumno1));
         assertFalse(ads.puedeCursar(alumno1)); // ads requiere que syo tambien este aprobada
     }
@@ -32,10 +39,11 @@ class InscripcionesTest {
     @DisplayName("Una inscripción solo estará aprobada si el alumno puede cursar todas las materias de la misma.")
     void inscripcionAprobada() {
         final Alumno alumno1 = new Alumno();
-        alumno1.aprobarMateria(algoritmos);
-        alumno1.aprobarMateria(discreta);
-        alumno1.aprobarMateria(syo);
-        final Inscripcion inscripcion1 = new Inscripcion(alumno1, new ArrayList<>(List.of(pdep, ads)));
+        alumno1.aprobarMateria(InscripcionesTest.algoritmos);
+        alumno1.aprobarMateria(InscripcionesTest.discreta);
+        alumno1.aprobarMateria(InscripcionesTest.syo);
+        final Inscripcion inscripcion1 = new Inscripcion(alumno1 );
+        inscripcion1.agregarMaterias(InscripcionesTest.pdep, InscripcionesTest.ads);
         assertTrue(inscripcion1.aprobada());
 
         final Alumno alumno2 = new Alumno();
@@ -43,7 +51,8 @@ class InscripcionesTest {
         alumno2.aprobarMateria(discreta);
         alumno2.aprobarMateria(syo);
         alumno2.aprobarMateria(pdep);
-        final Inscripcion inscripcion2 = new Inscripcion(alumno2, new ArrayList<>(List.of(ads, dds)));
+        final Inscripcion inscripcion2 = new Inscripcion(alumno2);
+        inscripcion2.agregarMaterias(InscripcionesTest.ads, InscripcionesTest.dds);
         assertFalse(inscripcion2.aprobada()); // dds no cumple con las correlatividades necesarias
     }
 
