@@ -4,19 +4,20 @@ class Inscripcion
 Inscripcion : - Alumno alumno
 Inscripcion : - Materia[] materias
 Inscripcion : + boolean aprobada()
+Inscripcion : + void agregarMaterias(Materia[] ...materias)
 
 class Materia
 Materia : - Materia[] correlativas
 Materia : + boolean puedeCursar(Alumno alumno)
-
+Materia : + void establecerCorrelativas(Materia[] ...materias)
 
 class Alumno
 Alumno : - Materia[] materiasAprobadas
 Alumno : + boolean materiaAprobada(Materia materia)
 Alumno : + boolean aprobarMateria(Materia materia)
 
-Inscripcion *-- Materia
-Inscripcion *-- Alumno
+Inscripcion o-- Materia
+Inscripcion o-- Alumno
 Materia <.. Inscripcion
 Alumno <.. Materia
 
