@@ -1,0 +1,50 @@
+@startuml
+
+class Artista
+Artista : -nombre : String
+Artista : +getNombre() : String
+
+class Album
+Album : -nombre : String
+Album : -anio : int
+Album : +getNombre() : String
+
+class Cancion
+Cancion : -titulo : String
+Cancion : -album : Album
+Cancion : -artista : Artista
+Cancion : -detalleCompleto() : String
+Cancion : -likes : int
+Cancion : -dislikes : int
+Cancion : -popularidad : Popularidad
+Cancion : -ultimaReproduccion : LocalDateTime
+Cancion : +reproducir() : void
+Cancion : +cambiarPopularidad(Popularidad popularidad) : void
+Cancion : +getLikes() : int
+
+Cancion o-- Album
+Cancion o-- Artista
+Cancion *-- Popularidad
+Cancion ..> Popularidad
+
+abstract class Popularidad
+Popularidad : -reproducciones : int
+Popularidad : -icono : String
+Popularidad : +obtenerLeyenda(Cancion cancion) : String
+Popularidad : +reproducir(Cancion cancion) : String
+
+class Normal extends Popularidad
+Normal : +obtenerLeyenda(Cancion cancion) : String
+
+class Auge extends Popularidad
+Auge : +obtenerLeyenda(Cancion cancion) : String
+
+class Tendencia extends Popularidad
+Tendencia : +obtenerLeyenda(Cancion cancion) : String
+
+Normal ..> Auge
+Auge ..> Tendencia
+Auge ..> Normal
+Tendencia ..> Normal
+
+@enduml
